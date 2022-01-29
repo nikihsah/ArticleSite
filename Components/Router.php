@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 class Router
 {
@@ -7,7 +8,7 @@ class Router
 
     public function __construct()
     {
-        $this -> routes = include(ROOT . "/config/routes.php");
+        $this -> routes = include(ROOT . '/config/routes.php');
     }
 
     public function run()
@@ -36,11 +37,14 @@ class Router
         }
     }
 
+    /**
+     * @return string|null
+     */
     public function getURI()
     {
         if(!empty($_SERVER['REQUEST_URI'])){
             return trim($_SERVER['REQUEST_URI'], '/');
         }
-        return null;
+        return '';
     }
 }
