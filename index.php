@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 define('ROOT', dirname(__FILE__));
 require_once(ROOT . '/Components/Router.php');
 
-include_once(ROOT . 'Components/Server.php');
+include_once(ROOT . '/Components/Server.php');
 $server = new Server();
 $server->connect();
 
