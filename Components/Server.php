@@ -23,32 +23,36 @@ class Server
 
     /**
      * @param string $table
-     * @param array $columns
-     * @param array $params
-     * @param string $orderBy
+     * @param string $columns
+     * @param array $params strings
      *
      * @return array
      */
-    public function getByColumns(string $table,array $columns = [0],array $params = [], string $orderBy = "")
+    public function getByColumns(string $table,string $columns, ...$params) : array
     {
         $sql = sprintf("SELECT * FROM %s", $table);
 
+        $columns = explode(' ', $columns);
+        $i = 0;
+
         if (count($columns) > 0){
+
             $sql = $sql . ' WHERE ';
+
             if (count($columns) > 1){
+
                 foreach($columns as $key => $value){
+
                     if($key != count($columns) - 1){
-                        $sql =$sql . $this->condition($value, $params) . 'AND';
+
+                        $sql =$sql . $this->condition($value, explode(' ', $params[$i])) . ' AND';
+                        $i++;
 
                     }else{
                         $sql = $sql . $this->condition($value, $params);
                     }
                 }
             }
-        }
-
-        if ($orderBy != ""){
-            $sql = $sql . sprintf("ORDER BY %s", $orderBy);
         }
 
         return $this->query($sql);
@@ -63,9 +67,9 @@ class Server
     private function condition(string $column, $params): string
     {
         if (count($params) == 1){
-            $sql = sprintf("%s = %s", $column, $params);
+            $sql = sprintf(" %s = %s", $column, $params);
         }else{
-            $sql = sprintf("%s in (%s", $column, $params);
+            $sql = sprintf(" %s in (%s", $column, $params);
             foreach($params as $key => $value){
 
                 if ($key != 0 and $key != count($params) - 1) {
