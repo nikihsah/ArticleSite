@@ -9,5 +9,7 @@ class MainController
 
     public function actionIndex(){
         echo "<h1>main</h1>";
+
+        return true;
     }
 }

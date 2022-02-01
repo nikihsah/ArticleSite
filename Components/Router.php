@@ -14,7 +14,6 @@ class Router
     public function run()
     {
         $uri = $this->getURI();
-
         foreach ($this->routes as $uriPattern => $path){
 
             if (preg_match("~$uriPattern~", $uri)){
@@ -27,6 +26,10 @@ class Router
                 if (file_exists($controlFile)){
                     include_once($controlFile);
                 }
+
+                $fl = fopen("file.txt", "w+");
+                fwrite($fl, $controlFile . " " . $actionName);
+                fclose($fl);
 
                 $controller = new $controllerName;
                 $result = $controller->$actionName();

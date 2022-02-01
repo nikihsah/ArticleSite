@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-class Server
+class BD
 {
-
     /**
      * @var string
      */
@@ -16,9 +15,50 @@ class Server
 
         $this->connect = mysqli_connect(
             $config['servername'],
-            $config['password'],
             $config['username'],
+            $config['password'],
             $config['dbname']);
+    }
+
+    /**
+     * @param string $username
+     * @param string $password
+     * @param string $email
+     *
+     * @return bool|mysqli_result
+     */
+    public function addUser(string $username, string $password, string $email){
+
+        $hashPassword = password_hash($password, PASSWORD_DEFAULT);
+        $dateRegister = date('Y-m-d');
+
+        $sql = 'INSERT INTO `users`(`username`, `hashpassword`,`date_registration`, `email`)';
+
+        return $this->queryAdd(sprintf(
+            "VALUES (%s, %s, %s, %s)",
+            $username,
+            $hashPassword,
+            $dateRegister,
+            $email));
+    }
+
+    /**
+     * @param string $table
+     * @param ...$columns
+     *
+     * @return array
+     */
+    public function getByColumn(string $table, ...$columns): array
+    {
+        $sql = 'SELECT';
+
+        foreach($columns as $key => $column){
+            $sql = $sql . ' ' . $column;
+        }
+
+        $sql = $sql . ' FROM ' . $table;
+
+        return $this->queryGet($sql);
     }
 
     /**
@@ -28,7 +68,7 @@ class Server
      *
      * @return array
      */
-    public function getByColumns(string $table,string $columns, ...$params) : array
+    public function getSelection(string $table,string $columns, ...$params) : array
     {
         $sql = sprintf("SELECT * FROM %s", $table);
 
@@ -55,7 +95,7 @@ class Server
             }
         }
 
-        return $this->query($sql);
+        return $this->queryGet($sql);
     }
 
     /**
@@ -87,7 +127,7 @@ class Server
      *
      * @return array
      */
-    private function query(string $sql): array
+    private function queryGet(string $sql): array
     {
         $result = mysqli_query($this->connect, $sql);
 
@@ -96,5 +136,15 @@ class Server
         }
 
         return $tablesRows;
+    }
+
+    /**
+     * @param string $sql
+     *
+     * @return bool|mysqli_result
+     */
+    private function queryAdd(string $sql){
+
+        return mysqli_query($this->connect, $sql);
     }
 }
