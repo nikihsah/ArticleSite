@@ -4,9 +4,15 @@ declare(strict_types=1);
 
 namespace components;
 
+use Controllers\MainController;
+use Controllers\RegistrationController;
+
 class Router
 {
     private $routes;
+    private $controllers = [
+        'MainController' => MainController::class,
+        'RegistrationController' => RegistrationController::class];
 
     public function __construct()
     {
@@ -16,6 +22,7 @@ class Router
     public function run()
     {
         $uri = $this->getURI();
+
         foreach ($this->routes as $uriPattern => $path){
 
             if (preg_match("~$uriPattern~", $uri)){
@@ -23,18 +30,10 @@ class Router
                 $segments = explode('/', $path);
                 $controllerName = ucfirst(array_shift($segments)) . 'Controller';
                 $actionName = 'action' . ucfirst(array_shift($segments));
-                $controlFile = ROOT . '/controllers/' . $controllerName . '.php';
 
-                if (file_exists($controlFile)){
-                    include_once($controlFile);
-                }
+                $controller = $this->controllers[$controllerName];
 
-                $fl = fopen("file.txt", "w+");
-                fwrite($fl, $controlFile . " " . $actionName);
-                fclose($fl);
-
-                $controller = new $controllerName;
-                $result = $controller->$actionName();
+                $result = (new $controller)->$actionName();
                 if($result){
                     break;
                 }

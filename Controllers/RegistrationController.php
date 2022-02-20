@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace controllers;
+namespace Controllers;
 
 use components\BD;
 use components\ValidateException;
