@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Controllers;
 
 use components\BD;
-use components\ValidateException;
+use components\exception\ValidateException;
 
 class RegistrationController
 {
@@ -17,10 +17,10 @@ class RegistrationController
             $result = $this->validation();
 
             if ($result != false){
-                $_POST['455'] = true;
+                $_POST['455'] = $result;
             }else{
                 $BD = new BD();
-                $BD ->addUser($_POST['username'], $_POST['password'], $_POST['email']);
+                $BD ->addUser($_POST['username'], password_hash($_POST['password'], PASSWORD_DEFAULT ), $_POST['email']);
             }
         }
 
@@ -36,14 +36,16 @@ class RegistrationController
         include_once(ROOT . '/view/includes/footer.php');
     }
 
+
     /**
-     * @return false
+     * @return false|string
      */
-    private function validation(): bool
+    private function validation()
     {
 
         $BD = new BD();
         $users = $BD->getByColumn('users', 'username', 'hashpassword', 'email');
+
 
         $error = false;
         try{

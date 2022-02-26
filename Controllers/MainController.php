@@ -2,6 +2,8 @@
 
 namespace Controllers;
 
+use components\BD;
+
 class MainController
 {
     public function __construct(){

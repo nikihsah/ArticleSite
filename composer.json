@@ -16,7 +16,11 @@
     "psr-4": {
       "arcticle\\": "",
       "components\\": "Components/",
-      "Controllers\\": "Controllers/"
+      "Controllers\\": "Controllers/",
+      "components\\exception\\": "Components/Exceptions"
     }
+  },
+  "require": {
+    "ext-mysqli": "*"
   }
 }

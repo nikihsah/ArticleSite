@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace components;
 
+use mysqli_result;
+
 class BD
 {
     /**
@@ -34,10 +36,10 @@ class BD
         $hashPassword = password_hash($password, PASSWORD_DEFAULT);
         $dateRegister = date('Y-m-d');
 
-        $sql = 'INSERT INTO `users`(`username`, `hashpassword`,`date_registration`, `email`)';
+        $sql = 'INSERT INTO `users` (`username`, `hashpassword`,`date_registration`, `email`) ';
 
-        return $this->queryAdd(sprintf(
-            "VALUES (%s, %s, %s, %s)",
+        return $this->queryAdd($sql . sprintf(
+            "VALUES ('%s', '%s', '%s', '%s')",
             $username,
             $hashPassword,
             $dateRegister,
@@ -52,13 +54,17 @@ class BD
      */
     public function getByColumn(string $table, ...$columns): array
     {
-        $sql = 'SELECT';
+        $sql = 'SELECT ';
 
         foreach($columns as $key => $column){
-            $sql = $sql . ' ' . $column;
+            if(!end($columns)==$key) {
+                $sql = $sql . " `" . $column . '`,';
+            }else{
+                $sql = $sql . " `" . $column . '`';
+            }
         }
 
-        $sql = $sql . ' FROM ' . $table;
+        $sql = sprintf("%s FROM `%s`", $sql,  $table);
 
         return $this->queryGet($sql);
     }
@@ -72,7 +78,7 @@ class BD
      */
     public function getSelection(string $table,string $columns, ...$params) : array
     {
-        $sql = sprintf("SELECT * FROM %s", $table);
+        $sql = sprintf("SELECT * FROM `%s`", $table);
 
         $columns = explode(' ', $columns);
         $i = 0;
@@ -133,6 +139,13 @@ class BD
     {
         $result = mysqli_query($this->connect, $sql);
 
+        printf("$sql");
+
+        if (!mysqli_query($this->connect, $sql)) {
+            printf("Сообщение ошибки: %s\n", $this->connect->error);
+            // todo Убрать на стадии готовности. return mysqli_query
+        }
+
         while($row = mysqli_fetch_assoc($result)){
             $tablesRows[] = $row;
         }
@@ -143,10 +156,14 @@ class BD
     /**
      * @param string $sql
      *
-     * @return bool|mysqli_result
+     * @return bool|string
      */
     private function queryAdd(string $sql){
-
-        return mysqli_query($this->connect, $sql);
+        echo "$sql";
+        if (!mysqli_query($this->connect, $sql)) {
+            return sprintf("Сообщение ошибки: %s\n", $this->connect->error);
+            // todo Убрать на стадии готовности. return mysqli_query
+        }
+        return True;
     }
 }

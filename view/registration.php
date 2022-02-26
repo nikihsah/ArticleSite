@@ -5,23 +5,8 @@
             <h3 >Введите ваши данные</h3>
             <div class="text-danger">
                 <?php
-                switch($_POST){
-
-                    case 1:
-                        echo "Email введен некоректно";
-                        break;
-
-                    case 2:
-                        echo "Ваш username должен содержать минимум 6 символов";
-                        break;
-
-                    case 3:
-                        echo "Password введен некоректно";
-                        break;
-
-                    case 4:
-                        echo 'Такой юзер существует';
-                        break;
+                if ($_POST['455']){
+                    echo $_POST['455'];
                 }
                 ?>
             </div>

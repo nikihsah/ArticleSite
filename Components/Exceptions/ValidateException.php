@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace components;
+namespace components\exception;
 
 use Exception;
 use Throwable;

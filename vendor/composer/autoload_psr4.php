@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'components\\exception\\' => array($baseDir . '/Components/Exceptions'),
     'components\\' => array($baseDir . '/Components'),
     'arcticle\\' => array($baseDir . '/'),
     'Symfony\\Polyfill\\Php80\\' => array($vendorDir . '/symfony/polyfill-php80'),
