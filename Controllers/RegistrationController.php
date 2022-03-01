@@ -31,9 +31,9 @@ class RegistrationController
 
     private function render()
     {
-        include_once(ROOT . '/view/includes/header.php');
-        include_once(ROOT . '/view/registration.php');
-        include_once(ROOT . '/view/includes/footer.php');
+        include_once('../view/includes/header.php');
+        include_once('../view/registration.php');
+        include_once('../view/includes/footer.php');
     }
 
 

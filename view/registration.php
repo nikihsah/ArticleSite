@@ -5,7 +5,7 @@
             <h3 >Введите ваши данные</h3>
             <div class="text-danger">
                 <?php
-                if ($_POST['455']){
+                if (isset($_POST['455'])){
                     echo $_POST['455'];
                 }
                 ?>

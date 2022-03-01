@@ -16,7 +16,7 @@ class Router
 
     public function __construct()
     {
-        $this -> routes = include(ROOT . '/config/routes.php');
+        $this -> routes = include('../config/routes.php');
     }
 
     public function run()

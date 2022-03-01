@@ -15,7 +15,7 @@ class BD
 
     public function __construct()
     {
-        $config = include(ROOT."/config/serverData.php");
+        $config = include("../config/serverData.php");
 
         $this->connect = mysqli_connect(
             $config['servername'],
@@ -29,9 +29,10 @@ class BD
      * @param string $password
      * @param string $email
      *
-     * @return bool|mysqli_result
+     * @return bool|string
      */
-    public function addUser(string $username, string $password, string $email){
+    public function addUser(string $username, string $password, string $email)
+    {
 
         $hashPassword = password_hash($password, PASSWORD_DEFAULT);
         $dateRegister = date('Y-m-d');
